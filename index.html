@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CapTcha Rewards</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-slate-900 text-white flex items-center justify-center">
+
+<div class="max-w-lg w-full bg-slate-800 rounded-2xl shadow-xl p-8 text-center">
+
+  <!-- HEADER -->
+  <h1 class="text-4xl font-extrabold mb-2">🎁 CapTcha Rewards</h1>
+  <p class="text-gray-400 mb-6">
+    Store credits only • No cash value
+  </p>
+
+  <!-- LOGIN STATE -->
+  <div id="loginBox" class="mb-6 hidden">
+    <button onclick="login()"
+      class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold">
+      Login with SellAuth
+    </button>
+  </div>
+
+  <!-- USER INFO -->
+  <div id="userBox" class="mb-6 hidden">
+    <p class="text-lg font-semibold">
+      Logged in as <span id="username" class="text-indigo-400"></span>
+    </p>
+    <p class="text-xl mt-2">
+      Balance: <span id="balance" class="text-green-400">$0</span>
+    </p>
+  </div>
+
+  <!-- SLOT -->
+  <div id="slotBox" class="hidden">
+    <div class="flex justify-center space-x-4 text-5xl mb-6">
+      <div id="slot1">❓</div>
+      <div id="slot2">❓</div>
+      <div id="slot3">❓</div>
+    </div>
+
+    <button onclick="spin()"
+      class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 rounded-xl font-bold text-lg">
+      Spin ($5)
+    </button>
+
+    <p id="result" class="mt-4 text-lg font-semibold"></p>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <p class="text-xs text-gray-500 mt-8">
+    Credits are virtual store credits only.<br>
+    No withdrawals • No cash value.
+  </p>
+
+</div>
+
+<script>
+const symbols = ["🍒","🍋","🔔","💎","7️⃣"];
+
+function login() {
+  window.location.href = "/auth/sellauth";
+}
+
+async function loadUser() {
+  try {
+    const res = await fetch("/api/me", { credentials: "include" });
+    const data = await res.json();
+
+    if (!data.loggedIn) {
+      document.getElementById("loginBox").classList.remove("hidden");
+      return;
+    }
+
+    document.getElementById("userBox").classList.remove("hidden");
+    document.getElementById("slotBox").classList.remove("hidden");
+
+    document.getElementById("username").innerText = data.username;
+    document.getElementById("balance").innerText = "$" + data.balance;
+  } catch {
+    document.getElementById("loginBox").classList.remove("hidden");
+  }
+}
+
+async function spin() {
+  document.getElementById("result").innerText = "Spinning...";
+
+  // visual spin
+  for (let i = 0; i < 15; i++) {
+    setTimeout(() => {
+      slot1.innerText = symbols[Math.floor(Math.random()*symbols.length)];
+      slot2.innerText = symbols[Math.floor(Math.random()*symbols.length)];
+      slot3.innerText = symbols[Math.floor(Math.random()*symbols.length)];
+    }, i * 80);
+  }
+
+  const res = await fetch("/api/slot/spin", {
+    method: "POST",
+    credentials: "include"
+  });
+
+  const data = await res.json();
+
+  if (data.error) {
+    document.getElementById("result").innerText = data.error;
+    return;
+  }
+
+  if (data.win) {
+    document.getElementById("result").innerText =
+      `🎉 You won $${data.payout} in store credit!`;
+  } else {
+    document.getElementById("result").innerText =
+      "❌ No win — try again!";
+  }
+
+  loadUser();
+}
+
+loadUser();
+</script>
+
+</body>
+</html>
