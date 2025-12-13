@@ -1,121 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>CapTcha Rewards</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8" />
+<title>CapTcha Spin</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+.reel {
+  transition: transform 0.25s ease-in-out;
+}
+.spin {
+  animation: spin 0.9s ease-in-out;
+}
+@keyframes spin {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-300px); }
+}
+</style>
 </head>
 
-<body class="min-h-screen bg-slate-900 text-white flex items-center justify-center">
+<body class="bg-slate-900 min-h-screen flex items-center justify-center text-white">
 
-<div class="max-w-lg w-full bg-slate-800 rounded-2xl shadow-xl p-8 text-center">
+<audio id="spinSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_4a8baf67f5.mp3"></audio>
+<audio id="winSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8f5b50b90.mp3"></audio>
 
-  <!-- HEADER -->
-  <h1 class="text-4xl font-extrabold mb-2">🎁 CapTcha Rewards</h1>
-  <p class="text-gray-400 mb-6">
-    Store credits only • No cash value
+<div class="bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-lg text-center">
+
+<h1 class="text-4xl font-extrabold mb-2">🎰 CapTcha Spin</h1>
+<p class="text-gray-400 mb-6">Store credit only</p>
+
+<!-- LOGIN -->
+<div id="loginBox" class="hidden">
+  <button onclick="login()" class="w-full py-3 bg-indigo-600 rounded-xl font-bold">
+    Login with SellAuth
+  </button>
+</div>
+
+<!-- USER -->
+<div id="userBox" class="hidden mb-4">
+  <p class="text-lg">
+    <span id="username" class="text-indigo-400"></span>
   </p>
-
-  <!-- LOGIN STATE -->
-  <div id="loginBox" class="mb-6 hidden">
-    <button onclick="login()"
-      class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold">
-      Login with SellAuth
-    </button>
-  </div>
-
-  <!-- USER INFO -->
-  <div id="userBox" class="mb-6 hidden">
-    <p class="text-lg font-semibold">
-      Logged in as <span id="username" class="text-indigo-400"></span>
-    </p>
-    <p class="text-xl mt-2">
-      Balance: <span id="balance" class="text-green-400">$0</span>
-    </p>
-  </div>
-
-  <!-- SLOT -->
-  <div id="slotBox" class="hidden">
-    <div class="flex justify-center space-x-4 text-5xl mb-6">
-      <div id="slot1">❓</div>
-      <div id="slot2">❓</div>
-      <div id="slot3">❓</div>
-    </div>
-
-    <button onclick="spin()"
-      class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 rounded-xl font-bold text-lg">
-      Spin ($5)
-    </button>
-
-    <p id="result" class="mt-4 text-lg font-semibold"></p>
-  </div>
-
-  <!-- DISCLAIMER -->
-  <p class="text-xs text-gray-500 mt-8">
-    Credits are virtual store credits only.<br>
-    No withdrawals • No cash value.
+  <p class="text-xl">
+    Balance: <span id="balance" class="text-green-400">$0</span>
   </p>
+</div>
+
+<!-- BET -->
+<div id="betBox" class="hidden mb-4">
+  <label class="block mb-2 font-semibold">Bet Amount</label>
+  <select id="bet" class="w-full p-3 rounded-xl bg-slate-700 text-white">
+    <option value="1">$1</option>
+    <option value="5" selected>$5</option>
+    <option value="10">$10</option>
+    <option value="25">$25</option>
+  </select>
+</div>
+
+<!-- SLOT -->
+<div id="slotBox" class="hidden">
+  <div class="flex justify-center space-x-4 text-6xl mb-6">
+    <div id="s1" class="reel">❓</div>
+    <div id="s2" class="reel">❓</div>
+    <div id="s3" class="reel">❓</div>
+  </div>
+
+  <button onclick="spin()"
+    class="w-full py-4 bg-emerald-600 rounded-xl font-bold text-lg hover:bg-emerald-700">
+    Spin
+  </button>
+
+  <p id="result" class="mt-4 text-lg font-semibold"></p>
+</div>
+
+<p class="text-xs text-gray-500 mt-6">
+Credits have no cash value • No withdrawals
+</p>
 
 </div>
 
 <script>
 const symbols = ["🍒","🍋","🔔","💎","7️⃣"];
+const spinSound = document.getElementById("spinSound");
+const winSound = document.getElementById("winSound");
 
 function login() {
-  window.location.href = "/auth/sellauth";
+  location.href = "/api/auth";
 }
 
 async function loadUser() {
-  try {
-    const res = await fetch("/api/me", { credentials: "include" });
-    const data = await res.json();
+  const r = await fetch("/api/me");
+  const d = await r.json();
 
-    if (!data.loggedIn) {
-      document.getElementById("loginBox").classList.remove("hidden");
-      return;
-    }
-
-    document.getElementById("userBox").classList.remove("hidden");
-    document.getElementById("slotBox").classList.remove("hidden");
-
-    document.getElementById("username").innerText = data.username;
-    document.getElementById("balance").innerText = "$" + data.balance;
-  } catch {
-    document.getElementById("loginBox").classList.remove("hidden");
-  }
-}
-
-async function spin() {
-  document.getElementById("result").innerText = "Spinning...";
-
-  // visual spin
-  for (let i = 0; i < 15; i++) {
-    setTimeout(() => {
-      slot1.innerText = symbols[Math.floor(Math.random()*symbols.length)];
-      slot2.innerText = symbols[Math.floor(Math.random()*symbols.length)];
-      slot3.innerText = symbols[Math.floor(Math.random()*symbols.length)];
-    }, i * 80);
-  }
-
-  const res = await fetch("/api/slot/spin", {
-    method: "POST",
-    credentials: "include"
-  });
-
-  const data = await res.json();
-
-  if (data.error) {
-    document.getElementById("result").innerText = data.error;
+  if (!d.loggedIn) {
+    loginBox.classList.remove("hidden");
     return;
   }
 
-  if (data.win) {
-    document.getElementById("result").innerText =
-      `🎉 You won $${data.payout} in store credit!`;
+  userBox.classList.remove("hidden");
+  betBox.classList.remove("hidden");
+  slotBox.classList.remove("hidden");
+
+  username.innerText = d.username;
+  balance.innerText = "$" + d.balance;
+}
+
+async function spin() {
+  const bet = bet.value;
+  result.innerText = "Spinning...";
+  spinSound.play();
+
+  s1.classList.add("spin");
+  s2.classList.add("spin");
+  s3.classList.add("spin");
+
+  for (let i = 0; i < 12; i++) {
+    setTimeout(() => {
+      s1.innerText = symbols[Math.floor(Math.random()*symbols.length)];
+      s2.innerText = symbols[Math.floor(Math.random()*symbols.length)];
+      s3.innerText = symbols[Math.floor(Math.random()*symbols.length)];
+    }, i * 80);
+  }
+
+  const r = await fetch("/api/slot", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ bet })
+  });
+
+  const d = await r.json();
+  s1.classList.remove("spin");
+  s2.classList.remove("spin");
+  s3.classList.remove("spin");
+
+  if (d.error) {
+    result.innerText = d.error;
+    return;
+  }
+
+  if (d.win) {
+    winSound.play();
+    result.innerText = `🎉 You won $${d.payout}!`;
   } else {
-    document.getElementById("result").innerText =
-      "❌ No win — try again!";
+    result.innerText = "❌ No win, try again.";
   }
 
   loadUser();
