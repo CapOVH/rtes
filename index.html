@@ -1,156 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<title>CapTcha Spin</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<title>CapTcha Rewards</title>
 <script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-.reel {
-  transition: transform 0.25s ease-in-out;
-}
-.spin {
-  animation: spin 0.9s ease-in-out;
-}
-@keyframes spin {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-300px); }
-}
-</style>
 </head>
 
 <body class="bg-slate-900 min-h-screen flex items-center justify-center text-white">
 
-<audio id="spinSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_4a8baf67f5.mp3"></audio>
-<audio id="winSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8f5b50b90.mp3"></audio>
+<div class="bg-slate-800 p-8 rounded-xl w-full max-w-md text-center">
 
-<div class="bg-slate-800 rounded-2xl shadow-xl p-8 w-full max-w-lg text-center">
-
-<h1 class="text-4xl font-extrabold mb-2">🎰 CapTcha Spin</h1>
-<p class="text-gray-400 mb-6">Store credit only</p>
+<h1 class="text-3xl font-bold mb-4">🎰 CapTcha Rewards</h1>
 
 <!-- LOGIN -->
-<div id="loginBox" class="hidden">
-  <button onclick="login()" class="w-full py-3 bg-indigo-600 rounded-xl font-bold">
-    Login with SellAuth
+<div id="loginBox">
+  <input id="key" placeholder="Enter your license key"
+    class="w-full p-3 rounded bg-slate-700 mb-4"/>
+  <button onclick="login()"
+    class="w-full bg-indigo-600 py-3 rounded font-bold">
+    Login
   </button>
 </div>
 
-<!-- USER -->
-<div id="userBox" class="hidden mb-4">
-  <p class="text-lg">
-    <span id="username" class="text-indigo-400"></span>
-  </p>
-  <p class="text-xl">
-    Balance: <span id="balance" class="text-green-400">$0</span>
-  </p>
-</div>
+<!-- GAME -->
+<div id="gameBox" class="hidden">
+  <p class="mb-2">Points: <span id="points">0</span></p>
 
-<!-- BET -->
-<div id="betBox" class="hidden mb-4">
-  <label class="block mb-2 font-semibold">Bet Amount</label>
-  <select id="bet" class="w-full p-3 rounded-xl bg-slate-700 text-white">
-    <option value="1">$1</option>
-    <option value="5" selected>$5</option>
-    <option value="10">$10</option>
-    <option value="25">$25</option>
+  <select id="bet" class="w-full p-2 bg-slate-700 rounded mb-3">
+    <option value="10">10 pts</option>
+    <option value="25">25 pts</option>
+    <option value="50">50 pts</option>
   </select>
-</div>
 
-<!-- SLOT -->
-<div id="slotBox" class="hidden">
-  <div class="flex justify-center space-x-4 text-6xl mb-6">
-    <div id="s1" class="reel">❓</div>
-    <div id="s2" class="reel">❓</div>
-    <div id="s3" class="reel">❓</div>
+  <div class="flex justify-center text-5xl mb-4">
+    <span id="r1">❓</span>
+    <span id="r2">❓</span>
+    <span id="r3">❓</span>
   </div>
 
   <button onclick="spin()"
-    class="w-full py-4 bg-emerald-600 rounded-xl font-bold text-lg hover:bg-emerald-700">
+    class="w-full bg-emerald-600 py-3 rounded font-bold">
     Spin
   </button>
 
-  <p id="result" class="mt-4 text-lg font-semibold"></p>
-</div>
+  <p id="result" class="mt-3"></p>
 
-<p class="text-xs text-gray-500 mt-6">
-Credits have no cash value • No withdrawals
-</p>
+  <a href="/redeem.html" class="block mt-4 underline">Redeem Points</a>
+</div>
 
 </div>
 
 <script>
-const symbols = ["🍒","🍋","🔔","💎","7️⃣"];
-const spinSound = document.getElementById("spinSound");
-const winSound = document.getElementById("winSound");
-
-function login() {
-  location.href = "/api/auth";
+async function login() {
+  const res = await fetch("/api/login", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({ key: key.value })
+  });
+  const d = await res.json();
+  if (d.ok) load();
+  else alert("Invalid key");
 }
 
-async function loadUser() {
+async function load() {
   const r = await fetch("/api/me");
   const d = await r.json();
-
-  if (!d.loggedIn) {
-    loginBox.classList.remove("hidden");
-    return;
-  }
-
-  userBox.classList.remove("hidden");
-  betBox.classList.remove("hidden");
-  slotBox.classList.remove("hidden");
-
-  username.innerText = d.username;
-  balance.innerText = "$" + d.balance;
+  if (!d.ok) return;
+  loginBox.classList.add("hidden");
+  gameBox.classList.remove("hidden");
+  points.innerText = d.points;
 }
 
 async function spin() {
-  const bet = bet.value;
+  const betVal = bet.value;
   result.innerText = "Spinning...";
-  spinSound.play();
-
-  s1.classList.add("spin");
-  s2.classList.add("spin");
-  s3.classList.add("spin");
-
-  for (let i = 0; i < 12; i++) {
-    setTimeout(() => {
-      s1.innerText = symbols[Math.floor(Math.random()*symbols.length)];
-      s2.innerText = symbols[Math.floor(Math.random()*symbols.length)];
-      s3.innerText = symbols[Math.floor(Math.random()*symbols.length)];
-    }, i * 80);
-  }
-
-  const r = await fetch("/api/slot", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ bet })
+  const r = await fetch("/api/spin", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({ bet: betVal })
   });
-
   const d = await r.json();
-  s1.classList.remove("spin");
-  s2.classList.remove("spin");
-  s3.classList.remove("spin");
-
-  if (d.error) {
-    result.innerText = d.error;
-    return;
-  }
-
-  if (d.win) {
-    winSound.play();
-    result.innerText = `🎉 You won $${d.payout}!`;
-  } else {
-    result.innerText = "❌ No win, try again.";
-  }
-
-  loadUser();
+  if (!d.ok) return alert(d.error);
+  result.innerText = d.win ? `🎉 Won ${d.payout} pts!` : "❌ Lost";
+  load();
 }
 
-loadUser();
+load();
 </script>
-
 </body>
 </html>
