@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Redeem</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center">
+
+<div class="bg-slate-800 p-8 rounded-xl w-full max-w-md text-center">
+<h2 class="text-2xl font-bold mb-4">Redeem Points</h2>
+
+<button onclick="redeem(100)"
+ class="w-full mb-3 bg-indigo-600 py-3 rounded">
+ Day Key – 100 pts
+</button>
+
+<button onclick="redeem(250)"
+ class="w-full bg-emerald-600 py-3 rounded">
+ Week Key – 250 pts
+</button>
+
+<p id="msg" class="mt-4"></p>
+</div>
+
+<script>
+async function redeem(cost) {
+  const r = await fetch("/api/redeem", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({ cost })
+  });
+  const d = await r.json();
+  msg.innerText = d.ok ? `KEY: ${d.key}` : d.error;
+}
+</script>
+</body>
+</html>
