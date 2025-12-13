@@ -1,91 +1,240 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>CapTcha Rewards</title>
-<script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Menu - Rainbet Style</title>
+    <meta name="description" content="Nexus Menu - The ultimate Macho Lua menu for FiveM with advanced script exploitation, cloud triggers, and custom addons.">
+    <link rel="shortcut icon" href="https://cdn.discordapp.com/attachments/1397642859406164120/1420192659783422022/nexus_menu_logo.png" type="image/png">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <style>
+        /* Reset */
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
+        body { background:#0f0f1c; color:#fff; line-height:1.6; }
+        a { text-decoration:none; color:inherit; }
+
+        /* Container */
+        .container { width:90%; max-width:1200px; margin:0 auto; }
+
+        /* Header */
+        header { display:flex; justify-content:space-between; align-items:center; padding:20px 0; position:fixed; width:100%; background:rgba(15,15,28,0.95); z-index:100; }
+        header .logo { font-size:1.8rem; font-weight:700; color:#DC2626; }
+        header nav ul { display:flex; gap:20px; list-style:none; }
+        header nav ul li a { padding:8px 12px; transition:0.3s; }
+        header nav ul li a:hover { color:#DC2626; }
+
+        /* Banner */
+        .banner { display:flex; align-items:center; justify-content:center; text-align:center; height:100vh; background:linear-gradient(135deg,#1c1c2f,#0f0f1c); }
+        .banner h1 { font-size:3rem; color:#fff; margin-bottom:10px; }
+        .banner h1 span { color:#DC2626; }
+        .banner p { font-size:1.2rem; margin-bottom:20px; max-width:600px; }
+        .btn { display:inline-block; padding:12px 25px; font-weight:600; border-radius:6px; cursor:pointer; transition:0.3s; border:none; }
+        .btn-sec { background:linear-gradient(45deg,#DC2626,#ff5555); color:#fff; }
+        .btn-sec:hover { opacity:0.85; }
+
+        /* Sections */
+        section { padding:100px 0; }
+        section h2 { font-size:2.5rem; margin-bottom:30px; text-align:center; color:#fff; }
+        section h2 span { color:#DC2626; }
+
+        /* About */
+        .about { display:flex; flex-wrap:wrap; align-items:center; gap:40px; justify-content:center; }
+        .about img { width:100%; max-width:500px; border-radius:12px; }
+        .about .about__content { max-width:500px; }
+        .about__content p { margin-bottom:15px; }
+
+        /* Features Cards */
+        .tokenomics ul { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; list-style:none; }
+        .tokenomics__card { background:#1c1c2f; padding:25px; border-radius:12px; width:250px; text-align:center; transition:0.3s; border:1px solid rgba(255,255,255,0.05); }
+        .tokenomics__card:hover { transform:translateY(-5px); border-color:#DC2626; }
+        .tokenomics__card i { font-size:2rem; margin-bottom:15px; color:#DC2626; }
+        .tokenomics__card h3 { margin-bottom:10px; }
+
+        /* Showcase */
+        .showcase iframe { width:100%; max-width:800px; height:450px; border-radius:12px; border:none; }
+
+        /* Gallery */
+        .gallery { display:flex; overflow:hidden; gap:10px; }
+        .gallery img { width:100%; flex-shrink:0; border-radius:12px; }
+
+        /* Pricing */
+        .roadmap__item { background:#1c1c2f; border-radius:12px; padding:25px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.05); transition:0.3s; }
+        .roadmap__item:hover { transform:translateY(-5px); border-color:#DC2626; }
+        .roadmap__item h2 { font-size:2rem; margin:10px 0; color:#DC2626; }
+        .roadmap__item ul { list-style:none; margin:10px 0; padding-left:0; }
+        .roadmap__item ul li { margin-bottom:5px; }
+        .roadmap__item button { background:#DC2626; color:#fff; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; transition:0.3s; }
+        .roadmap__item button:hover { background:#ff5555; }
+
+        /* FAQ */
+        .faq-list { list-style:none; max-width:800px; margin:0 auto; }
+        .htb__card { background:#1c1c2f; border-radius:12px; padding:20px; margin-bottom:15px; display:flex; gap:15px; border:1px solid rgba(255,255,255,0.05); transition:0.3s; }
+        .htb__card:hover { border-color:#DC2626; }
+        .htb__card i { font-size:2rem; color:#DC2626; }
+        .htb__card__info h3 { margin-bottom:10px; }
+
+        /* Footer */
+        footer { background:#0f0f1c; padding:50px 0; text-align:center; border-top:1px solid rgba(255,255,255,0.1); }
+        footer span { display:block; margin-bottom:15px; }
+        footer ul { display:flex; justify-content:center; gap:20px; list-style:none; }
+        footer ul li a { color:#fff; transition:0.3s; }
+        footer ul li a:hover { color:#DC2626; }
+
+        /* Responsive */
+        @media(max-width:768px) {
+            .about { flex-direction:column; }
+            .tokenomics ul { flex-direction:column; align-items:center; }
+        }
+    </style>
 </head>
+<body>
 
-<body class="bg-slate-900 min-h-screen flex items-center justify-center text-white">
+    <!-- Header -->
+    <header>
+        <div class="logo">Nexus Menu</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#showcases">Showcase</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#">Login</a></li>
+            </ul>
+        </nav>
+    </header>
 
-<div class="bg-slate-800 p-8 rounded-xl w-full max-w-md text-center">
+    <!-- Banner -->
+    <section class="banner" id="home">
+        <div>
+            <h1>Welcome to <span>Nexus Menu</span></h1>
+            <p>The ultimate Macho Lua menu for FiveM, delivering advanced script exploitation, cloud triggers, and custom addons.</p>
+            <button class="btn btn-sec" onclick="window.location.href='#pricing'">Explore Now <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+    </section>
 
-<h1 class="text-3xl font-bold mb-4">🎰 CapTcha Rewards</h1>
+    <!-- About -->
+    <section class="about" id="about">
+        <img src="https://cdn.discordapp.com/attachments/1397642859406164120/1420192107968069722/red_nexusmenu.png" alt="Nexus Menu Feature">
+        <div class="about__content">
+            <h2>About <span>Nexus Menu</span></h2>
+            <p>Nexus Menu delivers cutting-edge script exploitation for FiveM with cloud triggers, custom configs, and a powerful addon API.</p>
+            <p>Our intuitive UI, cloud-based system, and frequent updates ensure you're always ahead, with tools designed for both beginners and experts.</p>
+        </div>
+    </section>
 
-<!-- LOGIN -->
-<div id="loginBox">
-  <input id="key" placeholder="Enter your license key"
-    class="w-full p-3 rounded bg-slate-700 mb-4"/>
-  <button onclick="login()"
-    class="w-full bg-indigo-600 py-3 rounded font-bold">
-    Login
-  </button>
-</div>
+    <!-- Features -->
+    <section class="tokenomics" id="features">
+        <h2>Why Choose <span>Nexus Menu</span>?</h2>
+        <ul>
+            <li class="tokenomics__card">
+                <i class="fas fa-rocket"></i>
+                <h3>Simple</h3>
+                <p>Easy navigation with a sleek user-friendly interface.</p>
+            </li>
+            <li class="tokenomics__card">
+                <i class="fas fa-check"></i>
+                <h3>Reliable</h3>
+                <p>Frequent updates keep performance optimal.</p>
+            </li>
+            <li class="tokenomics__card">
+                <i class="fa-solid fa-comment"></i>
+                <h3>Dynamic Triggers</h3>
+                <p>Upload custom triggers for on-the-fly execution.</p>
+            </li>
+            <li class="tokenomics__card">
+                <i class="fa-solid fa-folder"></i>
+                <h3>Profitable</h3>
+                <p>Affordable plans with maximized server earnings.</p>
+            </li>
+        </ul>
+    </section>
 
-<!-- GAME -->
-<div id="gameBox" class="hidden">
-  <p class="mb-2">Points: <span id="points">0</span></p>
+    <!-- Showcase -->
+    <section id="showcases">
+        <h2>Showcase</h2>
+        <div class="showcase">
+            <iframe src="https://www.youtube.com/embed/ehdFNdmzQ6U" allowfullscreen></iframe>
+        </div>
+    </section>
 
-  <select id="bet" class="w-full p-2 bg-slate-700 rounded mb-3">
-    <option value="10">10 pts</option>
-    <option value="25">25 pts</option>
-    <option value="50">50 pts</option>
-  </select>
+    <!-- Pricing -->
+    <section class="tokenomics" id="pricing">
+        <h2>Pricing</h2>
+        <ul>
+            <li class="roadmap__item">
+                <h3>Standard <span>1 Day</span></h3>
+                <h2>$5</h2>
+                <ul>
+                    <li>Platform: All | Duration: 1 Day | Delivery: Instant | Users: 1</li>
+                </ul>
+                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
+            </li>
+            <li class="roadmap__item">
+                <h3>Standard <span>1 Week</span></h3>
+                <h2>$10</h2>
+                <ul>
+                    <li>Platform: All | Duration: 7 Days | Delivery: Instant | Users: 1</li>
+                </ul>
+                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
+            </li>
+            <li class="roadmap__item">
+                <h3>Standard <span>1 Month</span></h3>
+                <h2>$20</h2>
+                <ul>
+                    <li>Platform: All | Duration: 31 Days | Delivery: Instant | Users: 1</li>
+                </ul>
+                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
+            </li>
+            <li class="roadmap__item">
+                <h3>Standard <span>Lifetime</span></h3>
+                <h2>$30</h2>
+                <ul>
+                    <li>Platform: All | Duration: Lifetime | Delivery: Instant | Users: 1</li>
+                </ul>
+                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
+            </li>
+        </ul>
+    </section>
 
-  <div class="flex justify-center text-5xl mb-4">
-    <span id="r1">❓</span>
-    <span id="r2">❓</span>
-    <span id="r3">❓</span>
-  </div>
+    <!-- FAQ -->
+    <section id="faq">
+        <h2>Frequently Asked Questions</h2>
+        <ul class="faq-list">
+            <li class="htb__card">
+                <i class="fas fa-question-circle"></i>
+                <div class="htb__card__info">
+                    <h3>What is Nexus Menu?</h3>
+                    <p>A Macho Lua menu for FiveM with advanced script exploitation, custom addons, and a user-friendly interface.</p>
+                </div>
+            </li>
+            <li class="htb__card">
+                <i class="fas fa-shield-alt"></i>
+                <div class="htb__card__info">
+                    <h3>Is it safe?</h3>
+                    <p>Advanced anticheat bypasses and frequent updates ensure safety.</p>
+                </div>
+            </li>
+        </ul>
+    </section>
 
-  <button onclick="spin()"
-    class="w-full bg-emerald-600 py-3 rounded font-bold">
-    Spin
-  </button>
+    <!-- Footer -->
+    <footer>
+        <span>© 2025 Nexus Menu. All Rights Reserved.</span>
+        <ul>
+            <li><a href="#"><i class="fab fa-discord"></i></a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fas fa-envelope"></i></a></li>
+        </ul>
+    </footer>
 
-  <p id="result" class="mt-3"></p>
-
-  <a href="/redeem.html" class="block mt-4 underline">Redeem Points</a>
-</div>
-
-</div>
-
-<script>
-async function login() {
-  const res = await fetch("/api/login", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ key: key.value })
-  });
-  const d = await res.json();
-  if (d.ok) load();
-  else alert("Invalid key");
-}
-
-async function load() {
-  const r = await fetch("/api/me");
-  const d = await r.json();
-  if (!d.ok) return;
-  loginBox.classList.add("hidden");
-  gameBox.classList.remove("hidden");
-  points.innerText = d.points;
-}
-
-async function spin() {
-  const betVal = bet.value;
-  result.innerText = "Spinning...";
-  const r = await fetch("/api/spin", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({ bet: betVal })
-  });
-  const d = await r.json();
-  if (!d.ok) return alert(d.error);
-  result.innerText = d.win ? `🎉 Won ${d.payout} pts!` : "❌ Lost";
-  load();
-}
-
-load();
-</script>
 </body>
 </html>
