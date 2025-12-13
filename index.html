@@ -50,19 +50,26 @@
         .about .about__content { max-width:500px; }
         .about__content p { margin-bottom:15px; }
 
-        /* Features Cards */
+        /* Features & Gamble */
+        .feature-gamble { display:flex; flex-wrap:wrap; gap:40px; justify-content:center; align-items:flex-start; }
         .tokenomics ul { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; list-style:none; }
         .tokenomics__card { background:#1c1c2f; padding:25px; border-radius:12px; width:250px; text-align:center; transition:0.3s; border:1px solid rgba(255,255,255,0.05); }
         .tokenomics__card:hover { transform:translateY(-5px); border-color:#DC2626; }
         .tokenomics__card i { font-size:2rem; margin-bottom:15px; color:#DC2626; }
         .tokenomics__card h3 { margin-bottom:10px; }
 
+        /* Gambling */
+        .gamble-card { background:#1c1c2f; border-radius:12px; padding:25px; width:300px; border:1px solid rgba(255,255,255,0.05); transition:0.3s; }
+        .gamble-card:hover { border-color:#DC2626; transform:translateY(-5px); }
+        .gamble-card h3 { color:#DC2626; margin-bottom:15px; text-align:center; }
+        .gamble-card .balance { font-size:1.2rem; margin-bottom:15px; text-align:center; }
+        .gamble-card .gamble-buttons { display:flex; justify-content:space-around; margin-bottom:15px; }
+        .gamble-card button { padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:600; background:linear-gradient(45deg,#DC2626,#ff5555); color:#fff; transition:0.3s; }
+        .gamble-card button:hover { opacity:0.85; }
+        .gamble-card .result { text-align:center; margin-top:15px; font-weight:600; min-height:30px; }
+
         /* Showcase */
         .showcase iframe { width:100%; max-width:800px; height:450px; border-radius:12px; border:none; }
-
-        /* Gallery */
-        .gallery { display:flex; overflow:hidden; gap:10px; }
-        .gallery img { width:100%; flex-shrink:0; border-radius:12px; }
 
         /* Pricing */
         .roadmap__item { background:#1c1c2f; border-radius:12px; padding:25px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.05); transition:0.3s; }
@@ -91,6 +98,7 @@
         @media(max-width:768px) {
             .about { flex-direction:column; }
             .tokenomics ul { flex-direction:column; align-items:center; }
+            .feature-gamble { flex-direction:column; align-items:center; }
         }
     </style>
 </head>
@@ -131,31 +139,45 @@
         </div>
     </section>
 
-    <!-- Features -->
-    <section class="tokenomics" id="features">
-        <h2>Why Choose <span>Nexus Menu</span>?</h2>
-        <ul>
-            <li class="tokenomics__card">
-                <i class="fas fa-rocket"></i>
-                <h3>Simple</h3>
-                <p>Easy navigation with a sleek user-friendly interface.</p>
-            </li>
-            <li class="tokenomics__card">
-                <i class="fas fa-check"></i>
-                <h3>Reliable</h3>
-                <p>Frequent updates keep performance optimal.</p>
-            </li>
-            <li class="tokenomics__card">
-                <i class="fa-solid fa-comment"></i>
-                <h3>Dynamic Triggers</h3>
-                <p>Upload custom triggers for on-the-fly execution.</p>
-            </li>
-            <li class="tokenomics__card">
-                <i class="fa-solid fa-folder"></i>
-                <h3>Profitable</h3>
-                <p>Affordable plans with maximized server earnings.</p>
-            </li>
-        </ul>
+    <!-- Features & Gamble -->
+    <section class="feature-gamble" id="features">
+        <!-- Features Cards -->
+        <div class="tokenomics">
+            <h2>Why Choose <span>Nexus Menu</span>?</h2>
+            <ul>
+                <li class="tokenomics__card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Simple</h3>
+                    <p>Easy navigation with a sleek user-friendly interface.</p>
+                </li>
+                <li class="tokenomics__card">
+                    <i class="fas fa-check"></i>
+                    <h3>Reliable</h3>
+                    <p>Frequent updates keep performance optimal.</p>
+                </li>
+                <li class="tokenomics__card">
+                    <i class="fa-solid fa-comment"></i>
+                    <h3>Dynamic Triggers</h3>
+                    <p>Upload custom triggers for on-the-fly execution.</p>
+                </li>
+                <li class="tokenomics__card">
+                    <i class="fa-solid fa-folder"></i>
+                    <h3>Profitable</h3>
+                    <p>Affordable plans with maximized server earnings.</p>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Gamble Card -->
+        <div class="gamble-card">
+            <h3>Mini Gamble</h3>
+            <div class="balance">Balance: $<span id="balance">100</span></div>
+            <div class="gamble-buttons">
+                <button onclick="playSlots()">Slots</button>
+                <button onclick="playMines()">Mines</button>
+            </div>
+            <div class="result" id="result"></div>
+        </div>
     </section>
 
     <!-- Showcase -->
@@ -235,6 +257,47 @@
             <li><a href="#"><i class="fas fa-envelope"></i></a></li>
         </ul>
     </footer>
+
+    <script>
+        let balance = 100;
+        const maxWin = 1000;
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance;
+        }
+
+        function playSlots() {
+            let win = 0;
+            const roll = Math.random();
+            if (roll < 0.5) {
+                win = 0; // lose
+            } else {
+                win = Math.floor(Math.random() * 100) + 10; // win between 10-109
+                if(balance + win > maxWin) win = maxWin - balance;
+            }
+            balance += (win > 0 ? win : -10); // lose 10 if no win
+            if(balance < 0) balance = 0;
+            updateBalance();
+            document.getElementById('result').textContent = win > 0 ? `Slots Win: $${win}` : `Slots Lose: $10`;
+        }
+
+        function playMines() {
+            let win = 0;
+            const roll = Math.random();
+            if (roll < 0.7) {
+                win = 0; // lose
+            } else {
+                win = Math.floor(Math.random() * 150) + 20; // win between 20-169
+                if(balance + win > maxWin) win = maxWin - balance;
+            }
+            balance += (win > 0 ? win : -15); // lose 15 if no win
+            if(balance < 0) balance = 0;
+            updateBalance();
+            document.getElementById('result').textContent = win > 0 ? `Mines Win: $${win}` : `Mines Lose: $15`;
+        }
+
+        updateBalance();
+    </script>
 
 </body>
 </html>
