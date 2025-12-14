@@ -2,340 +2,294 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus Menu - Rainbet Style</title>
-    <meta name="description" content="Nexus Menu - The ultimate Macho Lua menu for FiveM with advanced script exploitation, cloud triggers, and custom addons.">
-    <link rel="shortcut icon" href="https://cdn.discordapp.com/attachments/1397642859406164120/1420192659783422022/nexus_menu_logo.png" type="image/png">
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
-
+    <title>Virtual Casino - Blackjack, Roulette, Mines</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
-        /* Reset */
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif; }
-        body { background:#0f0f1c; color:#fff; line-height:1.6; }
-        a { text-decoration:none; color:inherit; }
-
-        /* Container */
-        .container { width:90%; max-width:1200px; margin:0 auto; }
-
-        /* Header */
-        header { display:flex; justify-content:space-between; align-items:center; padding:20px 0; position:fixed; width:100%; background:rgba(15,15,28,0.95); z-index:100; }
-        header .logo { font-size:1.8rem; font-weight:700; color:#DC2626; }
-        header nav ul { display:flex; gap:20px; list-style:none; }
-        header nav ul li a { padding:8px 12px; transition:0.3s; }
-        header nav ul li a:hover { color:#DC2626; }
-
-        /* Banner */
-        .banner { display:flex; align-items:center; justify-content:center; text-align:center; height:100vh; background:linear-gradient(135deg,#1c1c2f,#0f0f1c); }
-        .banner h1 { font-size:3rem; color:#fff; margin-bottom:10px; }
-        .banner h1 span { color:#DC2626; }
-        .banner p { font-size:1.2rem; margin-bottom:20px; max-width:600px; }
-        .btn { display:inline-block; padding:12px 25px; font-weight:600; border-radius:6px; cursor:pointer; transition:0.3s; border:none; }
-        .btn-sec { background:linear-gradient(45deg,#DC2626,#ff5555); color:#fff; }
-        .btn-sec:hover { opacity:0.85; }
-
-        /* Sections */
-        section { padding:100px 0; }
-        section h2 { font-size:2.5rem; margin-bottom:30px; text-align:center; color:#fff; }
-        section h2 span { color:#DC2626; }
-
-        /* About */
-        .about { display:flex; flex-wrap:wrap; align-items:center; gap:40px; justify-content:center; }
-        .about img { width:100%; max-width:500px; border-radius:12px; }
-        .about .about__content { max-width:500px; }
-        .about__content p { margin-bottom:15px; }
-
-        /* Features & Gamble */
-        .feature-gamble { display:flex; flex-wrap:wrap; gap:40px; justify-content:center; align-items:flex-start; }
-        .tokenomics ul { display:flex; flex-wrap:wrap; gap:20px; justify-content:center; list-style:none; }
-        .tokenomics__card { background:#1c1c2f; padding:25px; border-radius:12px; width:250px; text-align:center; transition:0.3s; border:1px solid rgba(255,255,255,0.05); }
-        .tokenomics__card:hover { transform:translateY(-5px); border-color:#DC2626; }
-        .tokenomics__card i { font-size:2rem; margin-bottom:15px; color:#DC2626; }
-        .tokenomics__card h3 { margin-bottom:10px; }
-
-        /* Gambling */
-        .gamble-card { background:#1c1c2f; border-radius:12px; padding:25px; width:300px; border:1px solid rgba(255,255,255,0.05); transition:0.3s; }
-        .gamble-card:hover { border-color:#DC2626; transform:translateY(-5px); }
-        .gamble-card h3 { color:#DC2626; margin-bottom:15px; text-align:center; }
-        .gamble-card .balance { font-size:1.2rem; margin-bottom:15px; text-align:center; }
-        .gamble-card .gamble-buttons { display:flex; justify-content:space-around; margin-bottom:15px; }
-        .gamble-card button { padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:600; background:linear-gradient(45deg,#DC2626,#ff5555); color:#fff; transition:0.3s; }
-        .gamble-card button:hover { opacity:0.85; }
-        .gamble-card .result { text-align:center; margin-top:15px; font-weight:600; min-height:30px; }
-
-        /* Showcase */
-        .showcase iframe { width:100%; max-width:800px; height:450px; border-radius:12px; border:none; }
-
-        /* Pricing */
-        .roadmap__item { background:#1c1c2f; border-radius:12px; padding:25px; margin-bottom:20px; border:1px solid rgba(255,255,255,0.05); transition:0.3s; }
-        .roadmap__item:hover { transform:translateY(-5px); border-color:#DC2626; }
-        .roadmap__item h2 { font-size:2rem; margin:10px 0; color:#DC2626; }
-        .roadmap__item ul { list-style:none; margin:10px 0; padding-left:0; }
-        .roadmap__item ul li { margin-bottom:5px; }
-        .roadmap__item button { background:#DC2626; color:#fff; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; transition:0.3s; }
-        .roadmap__item button:hover { background:#ff5555; }
-
-        /* FAQ */
-        .faq-list { list-style:none; max-width:800px; margin:0 auto; }
-        .htb__card { background:#1c1c2f; border-radius:12px; padding:20px; margin-bottom:15px; display:flex; gap:15px; border:1px solid rgba(255,255,255,0.05); transition:0.3s; }
-        .htb__card:hover { border-color:#DC2626; }
-        .htb__card i { font-size:2rem; color:#DC2626; }
-        .htb__card__info h3 { margin-bottom:10px; }
-
-        /* Footer */
-        footer { background:#0f0f1c; padding:50px 0; text-align:center; border-top:1px solid rgba(255,255,255,0.1); }
-        footer span { display:block; margin-bottom:15px; }
-        footer ul { display:flex; justify-content:center; gap:20px; list-style:none; }
-        footer ul li a { color:#fff; transition:0.3s; }
-        footer ul li a:hover { color:#DC2626; }
-
-        /* Responsive */
-        @media(max-width:768px) {
-            .about { flex-direction:column; }
-            .tokenomics ul { flex-direction:column; align-items:center; }
-            .feature-gamble { flex-direction:column; align-items:center; }
-        }
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; text-align: center; margin: 0; padding: 20px; }
+        h1, h2 { color: #00ff00; }
+        button { padding: 10px 20px; margin: 10px; background: #00ff00; color: black; border: none; cursor: pointer; font-size: 16px; }
+        button:hover { background: #00cc00; }
+        input { padding: 10px; margin: 10px; width: 200px; }
+        #dashboard, #games { display: none; }
+        .game-section { margin: 20px; padding: 20px; background: #1e1e1e; border-radius: 10px; }
+        #mines-grid { display: grid; grid-template-columns: repeat(5, 60px); gap: 5px; margin: 20px auto; width: fit-content; }
+        .tile { width: 60px; height: 60px; background: #333; border: 2px solid #555; cursor: pointer; font-size: 30px; }
+        .revealed { background: #00ff00; }
+        .bomb { background: red; }
+        canvas { background: #000; border: 2px solid #00ff00; }
+        #balance-display { font-size: 24px; color: #00ff00; margin: 20px; }
     </style>
 </head>
 <body>
+    <h1>Virtual Casino</h1>
+    <p>Play with virtual credits from your SellAuth balance!</p>
 
-    <!-- Header -->
-    <header>
-        <div class="logo">Nexus Menu</div>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#showcases">Showcase</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="#">Login</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div id="login">
+        <h2>Login with Email</h2>
+        <input type="email" id="email" placeholder="your@email.com" required>
+        <button onclick="login()">Login</button>
+        <p><small>Top-up credits in your SellAuth shop (buy "Credit Pack" product).</small></p>
+    </div>
 
-    <!-- Banner -->
-    <section class="banner" id="home">
-        <div>
-            <h1>Welcome to <span>Nexus Menu</span></h1>
-            <p>The ultimate Macho Lua menu for FiveM, delivering advanced script exploitation, cloud triggers, and custom addons.</p>
-            <button class="btn btn-sec" onclick="window.location.href='#pricing'">Explore Now <i class="fa-solid fa-arrow-right"></i></button>
+    <div id="dashboard">
+        <h2>Welcome, <span id="user-email"></span></h2>
+        <div id="balance-display">Balance: Loading...</div>
+        <button onclick="refreshBalance()">Refresh Balance</button>
+        <button onclick="logout()">Logout</button>
+
+        <h2>Games</h2>
+        <div class="game-section">
+            <button onclick="showGame('blackjack')">Play Blackjack</button>
+            <button onclick="showGame('roulette')">Play Roulette</button>
+            <button onclick="showGame('mines')">Play Mines</button>
         </div>
-    </section>
+    </div>
 
-    <!-- About -->
-    <section class="about" id="about">
-        <img src="https://cdn.discordapp.com/attachments/1397642859406164120/1420192107968069722/red_nexusmenu.png" alt="Nexus Menu Feature">
-        <div class="about__content">
-            <h2>About <span>Nexus Menu</span></h2>
-            <p>Nexus Menu delivers cutting-edge script exploitation for FiveM with cloud triggers, custom configs, and a powerful addon API.</p>
-            <p>Our intuitive UI, cloud-based system, and frequent updates ensure you're always ahead, with tools designed for both beginners and experts.</p>
-        </div>
-    </section>
+    <!-- Games -->
+    <div id="blackjack" class="game-section" style="display:none;">
+        <h2>Blackjack</h2>
+        <p>Bet amount: <input type="number" id="bj-bet" min="1" value="10"></p>
+        <button onclick="startBlackjack()">Start Game</button>
+        <div id="bj-status"></div>
+        <div id="bj-player"></div>
+        <div id="bj-dealer"></div>
+        <button onclick="bjHit()" style="display:none;" id="bj-hit">Hit</button>
+        <button onclick="bjStand()" style="display:none;" id="bj-stand">Stand</button>
+        <button onclick="showGame('dashboard')">Back</button>
+    </div>
 
-    <!-- Features & Gamble -->
-    <section class="feature-gamble" id="features">
-        <!-- Features Cards -->
-        <div class="tokenomics">
-            <h2>Why Choose <span>Nexus Menu</span>?</h2>
-            <ul>
-                <li class="tokenomics__card">
-                    <i class="fas fa-rocket"></i>
-                    <h3>Simple</h3>
-                    <p>Easy navigation with a sleek user-friendly interface.</p>
-                </li>
-                <li class="tokenomics__card">
-                    <i class="fas fa-check"></i>
-                    <h3>Reliable</h3>
-                    <p>Frequent updates keep performance optimal.</p>
-                </li>
-                <li class="tokenomics__card">
-                    <i class="fa-solid fa-comment"></i>
-                    <h3>Dynamic Triggers</h3>
-                    <p>Upload custom triggers for on-the-fly execution.</p>
-                </li>
-                <li class="tokenomics__card">
-                    <i class="fa-solid fa-folder"></i>
-                    <h3>Profitable</h3>
-                    <p>Affordable plans with maximized server earnings.</p>
-                </li>
-            </ul>
-        </div>
+    <div id="roulette" class="game-section" style="display:none;">
+        <h2>Roulette (Red/Black)</h2>
+        <p>Bet amount: <input type="number" id="rl-bet" min="1" value="10"></p>
+        <select id="rl-choice"><option value="red">Red</option><option value="black">Black</option></select>
+        <button onclick="spinRoulette()">Spin</button>
+        <div id="rl-result"></div>
+        <button onclick="showGame('dashboard')">Back</button>
+    </div>
 
-        <!-- Gamble Card -->
-        <div class="gamble-card">
-            <h3>Mini Gamble</h3>
-            <div class="balance">Balance: $<span id="balance">100</span></div>
-            <div class="gamble-buttons">
-                <button onclick="playSlots()">Slots</button>
-                <button onclick="playMines()">Mines</button>
-            </div>
-            <div class="result" id="result"></div>
-        </div>
-    </section>
-
-    <!-- Showcase -->
-    <section id="showcases">
-        <h2>Showcase</h2>
-        <div class="showcase">
-            <iframe src="https://www.youtube.com/embed/ehdFNdmzQ6U" allowfullscreen></iframe>
-        </div>
-    </section>
-
-    <section class="tokenomics" id="gamble">
-        <h2>Gamble</h2>
-        <ul>
-            <li class="roadmap__item">
-                <h3>Standard <span>1 Day</span></h3>
-                <h2>$5</h2>
-                <ul>
-                    <li>Platform: All | Duration: 1 Day | Delivery: Instant | Users: 1</li>
-                </ul>
-                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
-            </li>
-            <li class="roadmap__item">
-                <h3>Standard <span>1 Week</span></h3>
-                <h2>$10</h2>
-                <ul>
-                    <li>Platform: All | Duration: 7 Days | Delivery: Instant | Users: 1</li>
-                </ul>
-                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
-            </li>
-            <li class="roadmap__item">
-                <h3>Standard <span>1 Month</span></h3>
-                <h2>$20</h2>
-                <ul>
-                    <li>Platform: All | Duration: 31 Days | Delivery: Instant | Users: 1</li>
-                </ul>
-                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
-            </li>
-            <li class="roadmap__item">
-                <h3>Standard <span>Lifetime</span></h3>
-                <h2>$30</h2>
-                <ul>
-                    <li>Platform: All | Duration: Lifetime | Delivery: Instant | Users: 1</li>
-                </ul>
-                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
-            </li>
-        </ul>
-    </section>
-    
-    <!-- Pricing -->
-    <section class="tokenomics" id="pricing">
-        <h2>Pricing</h2>
-        <ul>
-            <li class="roadmap__item">
-                <h3>Standard <span>1 Day</span></h3>
-                <h2>$5</h2>
-                <ul>
-                    <li>Platform: All | Duration: 1 Day | Delivery: Instant | Users: 1</li>
-                </ul>
-                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
-            </li>
-            <li class="roadmap__item">
-                <h3>Standard <span>1 Week</span></h3>
-                <h2>$10</h2>
-                <ul>
-                    <li>Platform: All | Duration: 7 Days | Delivery: Instant | Users: 1</li>
-                </ul>
-                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
-            </li>
-            <li class="roadmap__item">
-                <h3>Standard <span>1 Month</span></h3>
-                <h2>$20</h2>
-                <ul>
-                    <li>Platform: All | Duration: 31 Days | Delivery: Instant | Users: 1</li>
-                </ul>
-                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
-            </li>
-            <li class="roadmap__item">
-                <h3>Standard <span>Lifetime</span></h3>
-                <h2>$30</h2>
-                <ul>
-                    <li>Platform: All | Duration: Lifetime | Delivery: Instant | Users: 1</li>
-                </ul>
-                <button onclick="window.location.href='https://discord.gg/nexusmenu'">Purchase</button>
-            </li>
-        </ul>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq">
-        <h2>Frequently Asked Questions</h2>
-        <ul class="faq-list">
-            <li class="htb__card">
-                <i class="fas fa-question-circle"></i>
-                <div class="htb__card__info">
-                    <h3>What is Nexus Menu?</h3>
-                    <p>A Macho Lua menu for FiveM with advanced script exploitation, custom addons, and a user-friendly interface.</p>
-                </div>
-            </li>
-            <li class="htb__card">
-                <i class="fas fa-shield-alt"></i>
-                <div class="htb__card__info">
-                    <h3>Is it safe?</h3>
-                    <p>Advanced anticheat bypasses and frequent updates ensure safety.</p>
-                </div>
-            </li>
-        </ul>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <span>© 2025 Nexus Menu. All Rights Reserved.</span>
-        <ul>
-            <li><a href="#"><i class="fab fa-discord"></i></a></li>
-            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-            <li><a href="#"><i class="fas fa-envelope"></i></a></li>
-        </ul>
-    </footer>
+    <div id="mines" class="game-section" style="display:none;">
+        <h2>Mines (5x5 grid, 5 mines)</h2>
+        <p>Bet amount: <input type="number" id="mines-bet" min="1" value="10"></p>
+        <button onclick="startMines()">Start New Game</button>
+        <div id="mines-status"></div>
+        <div id="mines-grid"></div>
+        <button onclick="cashoutMines()" id="mines-cashout" style="display:none;">Cash Out</button>
+        <button onclick="showGame('dashboard')">Back</button>
+    </div>
 
     <script>
-        let balance = 100;
-        const maxWin = 1000;
+        let email = '';
+        let balance = 0;
+        let serverSeed = CryptoJS.lib.WordArray.random(32).toString(); // Simple server seed (in real: generate per round server-side)
+        let clientSeed = Math.random().toString();
+        let nonce = 0;
 
-        function updateBalance() {
-            document.getElementById('balance').textContent = balance;
+        // REPLACE THIS WITH YOUR BACKEND PROXY URL!
+        const PROXY_URL = 'https://your-proxy.vercel.app/api'; // Example: create a serverless function
+
+        async function login() {
+            email = document.getElementById('email').value;
+            if (!email) return alert('Enter email');
+            document.getElementById('user-email').textContent = email;
+            document.getElementById('login').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            await refreshBalance();
         }
 
-        function playSlots() {
-            let win = 0;
-            const roll = Math.random();
-            if (roll < 0.5) {
-                win = 0; // lose
-            } else {
-                win = Math.floor(Math.random() * 100) + 10; // win between 10-109
-                if(balance + win > maxWin) win = maxWin - balance;
+        async function refreshBalance() {
+            try {
+                const res = await fetch(`${PROXY_URL}/balance?email=${encodeURIComponent(email)}`);
+                const data = await res.json();
+                balance = data.balance || 0;
+                document.getElementById('balance-display').textContent = `Balance: ${balance} credits`;
+            } catch (e) {
+                alert('Balance fetch failed - set up backend proxy');
             }
-            balance += (win > 0 ? win : -10); // lose 10 if no win
-            if(balance < 0) balance = 0;
-            updateBalance();
-            document.getElementById('result').textContent = win > 0 ? `Slots Win: $${win}` : `Slots Lose: $10`;
         }
 
-        function playMines() {
-            let win = 0;
-            const roll = Math.random();
-            if (roll < 0.7) {
-                win = 0; // lose
-            } else {
-                win = Math.floor(Math.random() * 150) + 20; // win between 20-169
-                if(balance + win > maxWin) win = maxWin - balance;
+        async function updateBalance(change, desc) {
+            try {
+                await fetch(`${PROXY_URL}/outcome`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email, amountChange: change, description: desc})
+                });
+                await refreshBalance();
+            } catch (e) {
+                alert('Balance update failed');
             }
-            balance += (win > 0 ? win : -15); // lose 15 if no win
-            if(balance < 0) balance = 0;
-            updateBalance();
-            document.getElementById('result').textContent = win > 0 ? `Mines Win: $${win}` : `Mines Lose: $15`;
         }
 
-        updateBalance();
+        function logout() {
+            location.reload();
+        }
+
+        function showGame(game) {
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('blackjack').style.display = game === 'blackjack' ? 'block' : 'none';
+            document.getElementById('roulette').style.display = game === 'roulette' ? 'block' : 'none';
+            document.getElementById('mines').style.display = game === 'mines' ? 'block' : 'none';
+        }
+
+        // Provably Fair Helper
+        function provablyRandom() {
+            const hmac = CryptoJS.HmacSHA256(clientSeed + '-' + nonce, serverSeed);
+            const hex = hmac.toString().substring(0, 8);
+            return parseInt(hex, 16) / Math.pow(16, 8);
+        }
+
+        // Simple Blackjack
+        let bjDeck, bjPlayer = [], bjDealer = [], bjBet;
+        function startBlackjack() {
+            bjBet = parseInt(document.getElementById('bj-bet').value);
+            if (bjBet > balance) return alert('Insufficient balance');
+            updateBalance(-bjBet, 'Blackjack bet');
+            nonce++;
+            bjDeck = generateDeck();
+            bjPlayer = [drawCard(), drawCard()];
+            bjDealer = [drawCard(), drawCard()];
+            renderBJ();
+            checkBJEnd();
+        }
+        function generateDeck() {
+            const suits = ['♠','♥','♦','♣'];
+            const ranks = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+            let deck = [];
+            for (let s of suits) for (let r of ranks) deck.push(r + s);
+            // Shuffle with provably fair
+            for (let i = deck.length - 1; i > 0; i--) {
+                let j = Math.floor(provablyRandom() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            return deck;
+        }
+        function drawCard() { return bjDeck.pop(); }
+        function cardValue(card) {
+            const v = card.slice(0, -1);
+            return v === 'A' ? 11 : (['J','Q','K'].includes(v) ? 10 : parseInt(v));
+        }
+        function handValue(hand) {
+            let val = 0, aces = 0;
+            for (let c of hand) {
+                let v = cardValue(c);
+                if (v === 11) aces++;
+                val += v;
+            }
+            while (val > 21 && aces) { val -= 10; aces--; }
+            return val;
+        }
+        function renderBJ() {
+            document.getElementById('bj-player').textContent = 'You: ' + bjPlayer.join(' ') + ' (Value: ' + handValue(bjPlayer) + ')';
+            document.getElementById('bj-dealer').textContent = 'Dealer: ' + bjDealer[0] + ' ??';
+        }
+        function bjHit() {
+            bjPlayer.push(drawCard());
+            renderBJ();
+            if (handValue(bjPlayer) > 21) checkBJEnd(true);
+        }
+        function bjStand() {
+            while (handValue(bjDealer) < 17) bjDealer.push(drawCard());
+            document.getElementById('bj-dealer').textContent = 'Dealer: ' + bjDealer.join(' ') + ' (Value: ' + handValue(bjDealer) + ')';
+            checkBJEnd();
+        }
+        function checkBJEnd(bust = false) {
+            const playerVal = handValue(bjPlayer);
+            const dealerVal = handValue(bjDealer);
+            document.getElementById('bj-hit').style.display = 'none';
+            document.getElementById('bj-stand').style.display = 'none';
+            if (bust || playerVal > 21 || (dealerVal <= 21 && dealerVal > playerVal)) {
+                document.getElementById('bj-status').textContent = 'You lose!';
+            } else if (dealerVal > 21 || playerVal > dealerVal) {
+                updateBalance(bjBet * 2, 'Blackjack win');
+                document.getElementById('bj-status').textContent = 'You win!';
+            } else {
+                updateBalance(bjBet, 'Blackjack push');
+                document.getElementById('bj-status').textContent = 'Push';
+            }
+            document.getElementById('bj-hit').style.display = playerVal <= 21 ? 'inline' : 'none';
+            document.getElementById('bj-stand').style.display = playerVal <= 21 ? 'inline' : 'none';
+        }
+
+        // Simple Roulette (Red/Black only)
+        async function spinRoulette() {
+            const bet = parseInt(document.getElementById('rl-bet').value);
+            const choice = document.getElementById('rl-choice').value;
+            if (bet > balance) return alert('Insufficient balance');
+            await updateBalance(-bet, 'Roulette bet');
+            nonce++;
+            const rand = provablyRandom() * 37; // 0-36
+            const number = Math.floor(rand);
+            const isRed = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(number);
+            const color = number === 0 ? 'green' : isRed ? 'red' : 'black';
+            document.getElementById('rl-result').textContent = `Ball landed on ${number} (${color})`;
+            if ((choice === 'red' && isRed) || (choice === 'black' && !isRed && number !== 0)) {
+                await updateBalance(bet * 2, 'Roulette win');
+                document.getElementById('rl-result').textContent += ' - YOU WIN!';
+            } else {
+                document.getElementById('rl-result').textContent += ' - You lose';
+            }
+        }
+
+        // Mines
+        let minesBet, safeTiles = 0, minesRevealed = false;
+        const GRID_SIZE = 25, MINES_COUNT = 5;
+        let minePositions = [];
+        function startMines() {
+            minesBet = parseInt(document.getElementById('mines-bet').value);
+            if (minesBet > balance) return alert('Insufficient balance');
+            updateBalance(-minesBet, 'Mines bet');
+            nonce++;
+            minePositions = [];
+            while (minePositions.length < MINES_COUNT) {
+                let pos = Math.floor(provablyRandom() * GRID_SIZE);
+                if (!minePositions.includes(pos)) minePositions.push(pos);
+            }
+            safeTiles = 0;
+            minesRevealed = false;
+            document.getElementById('mines-status').textContent = 'Safe tiles opened: 0 | Multiplier: 1x';
+            document.getElementById('mines-cashout').style.display = 'inline';
+            const grid = document.getElementById('mines-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < GRID_SIZE; i++) {
+                const tile = document.createElement('div');
+                tile.classList.add('tile');
+                tile.onclick = () => revealTile(i, tile);
+                grid.appendChild(tile);
+            }
+        }
+        function revealTile(pos, tile) {
+            if (minesRevealed || tile.classList.contains('revealed')) return;
+            tile.classList.add('revealed');
+            if (minePositions.includes(pos)) {
+                tile.textContent = '💣';
+                tile.classList.add('bomb');
+                minesRevealed = true;
+                document.getElementById('mines-status').textContent = 'BOOM! You lose.';
+                document.getElementById('mines-cashout').style.display = 'none';
+                revealAllMines();
+            } else {
+                tile.textContent = '💎';
+                safeTiles++;
+                const multiplier = (safeTiles + 1); // Simple multiplier
+                document.getElementById('mines-status').textContent = `Safe: ${safeTiles} | Multiplier: ${multiplier}x`;
+            }
+        }
+        function cashoutMines() {
+            if (minesRevealed) return;
+            const win = minesBet * (safeTiles + 1);
+            updateBalance(win, 'Mines cashout');
+            document.getElementById('mines-status').textContent += ` - Cashed out ${win} credits!`;
+            document.getElementById('mines-cashout').style.display = 'none';
+            revealAllMines();
+        }
+        function revealAllMines() {
+            const tiles = document.querySelectorAll('#mines-grid .tile');
+            minePositions.forEach(p => {
+                tiles[p].textContent = '💣';
+                tiles[p].classList.add('bomb');
+            });
+        }
     </script>
-
 </body>
 </html>
